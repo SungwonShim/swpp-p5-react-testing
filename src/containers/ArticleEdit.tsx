@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store';
 import { postArticle, fetchArticles } from '../store/slices/article';
-import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/user';
+import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
 
 export default function ArticleEdit(){
     const [title, setTitle] = useState<string>("");

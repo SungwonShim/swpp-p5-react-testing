@@ -4,7 +4,7 @@ import { AppDispatch } from '../store';
 import { fetchArticles, selectArticle, ArticleType } from '../store/slices/article';
 import Article from '../components/Article';
 import { useNavigate, NavLink } from 'react-router-dom';
-import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/user';
+import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
 
 export default function ArticleList(){
     const articleState = useSelector(selectArticle);

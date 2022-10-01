@@ -1,9 +1,24 @@
-import './App.css';
+import "./App.css";
+import Login from "./containers/Login"; 
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ArticleList from "./containers/ArticleList";
+import ArticleCreate from './containers/ArticleCreate';
+import ArticleDetail from "./containers/ArticleDetail";
+import ArticleEdit from './containers/ArticleEdit';
 
 function App() {
   return (
     <div className="App">
-      <h1>SWPP HW3!</h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element ={<Login />} />
+          <Route path="/articles" element={<ArticleList/>}/>
+          <Route path="/articles/create" element={<ArticleCreate/>}/>
+          <Route path="/articles/:id" element={<ArticleDetail/>}/>
+          <Route path="/articles/:id/edit" element={<ArticleEdit/>}/>
+          <Route path="/" element={<Navigate replace to={"/articles"} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

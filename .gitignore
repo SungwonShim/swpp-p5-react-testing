@@ -19,6 +19,11 @@
 .env.test.local
 .env.production.local
 
+.bash_history
+.config/
+yarn.lock
+
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -19,14 +19,14 @@ export default function ArticeDetail(){
     useEffect(() => {
         dispatch(fetchUsers());
         dispatch(fetchUser());
-        if(!userState.loginFlag){
-            navigate('/login');
-       }
+         if(!userState.user?.logged_in){
+             navigate('/login');
+        }
         // dispatch(fetchArticles());
         // const splitURL = location.pathname.split('/');
         // let arId = parseInt(splitURL[splitURL.length-1]);
         // dispatch(articleActions.getOneArticle({articleId: arId}))
-        console.log(id);
+        console.log("detail");
         dispatch(fetchArticle(Number(id)));
     }, [id]);
 
@@ -45,11 +45,12 @@ export default function ArticeDetail(){
     
     const logoutButtonHandler = async () => {
         const token = userState.users.find((user : UserType) => {return user.id === 1;});
-        if(token === undefined)
-          return;
-        const result = await dispatch(outUser(token));
-        navigate('/login');
-      };
+        if(token !== undefined) {
+            let noUser = {...token, logged_in: false};
+            await dispatch(outUser(noUser));
+            navigate('/login');
+        }
+    };
       
     // if(true){ // if id same
     //     CEDButtonHandler = (

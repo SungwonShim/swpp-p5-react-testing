@@ -16,7 +16,7 @@ function App() {
           <Route path="/articles/create" element={<ArticleCreate/>}/>
           <Route path="/articles/:id" element={<ArticleDetail/>}/>
           <Route path="/articles/:id/edit" element={<ArticleEdit/>}/>
-          <Route path="/" element={<Navigate replace to={"/articles"} />} />
+          <Route path="/" element={<Navigate replace to={"/login"} />} />
         </Routes>
       </BrowserRouter>
     </div>

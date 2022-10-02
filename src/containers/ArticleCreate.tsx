@@ -19,9 +19,10 @@ export default function ArticleCreate(){
     useEffect(() => {
       dispatch(fetchUsers());
       dispatch(fetchUser());
-      if(!userState.loginFlag){
-        navigate('/login');
-     }
+      if(!userState.user?.logged_in){
+         navigate('/login');
+      }
+      console.log("create");
       dispatch(fetchArticles());
   }, []);
 
@@ -42,11 +43,12 @@ export default function ArticleCreate(){
 
     const logoutButtonHandler = async () => {
       const token = userState.users.find((user : UserType) => {return user.id === 1;});
-      if(token === undefined)
-        return;
-      await dispatch(outUser(token));
-      navigate('/login');
-    };
+      if(token !== undefined) {
+          let noUser = {...token, logged_in: false};
+          await dispatch(outUser(noUser));
+          navigate('/login');
+      }
+  };
 
     return(
         <div className="ArticleCreate">

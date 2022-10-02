@@ -53,34 +53,21 @@ export const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers:{
-        getAllUsers: (state, action: PayloadAction<{ users: UserType[] }>) => {
-            return {...state, users: action.payload.users};
-        },
-        logIn: (state, action: PayloadAction<{ user: UserType }>) => {
-            console.log(action.payload.user);
-            const newUser = {id: action.payload.user.id,
-                            email: action.payload.user.email,
-                            password: action.payload.user.password,
-                            name: action.payload.user.name,
-                            logged_in: true};
+        logIn: (state, action: PayloadAction<UserType>) => {
+            console.log(action.payload);
+            const newUser = {...action.payload, logged_in: true};
             console.log(newUser);
             const usersAfterLogin = state.users.filter((user) => {
-                return (user.id !== action.payload.user.id);
+                return (user.id !== action.payload.id);
             });
-            console.log(usersAfterLogin);
             return {...state, users: [...usersAfterLogin, newUser], user: newUser, loginFlag: true};
         },
-        logOut: (state, action: PayloadAction<{ user: UserType }>) => {
-            action.payload.user.logged_in = false;
-            const outUser = {...action.payload.user};
+        logOut: (state, action: PayloadAction<UserType>) => {
+            const outUser = {...action.payload, logged_in: false};
             const usersAfterLogout = state.users.filter((user) => {
-                return (user.id !== action.payload.user.id);
+                return (user.id !== action.payload.id);
             });
             return {...state, users: [...usersAfterLogout, outUser], user: outUser, loginFlag: false};
-        },
-         checkLogIn: (state, action: PayloadAction<{ user: UserType }>) => {
-             const flag = action.payload.user.logged_in;
-             return {...state, loginFlag: flag};
         },
     },
     extraReducers: (builder) => {

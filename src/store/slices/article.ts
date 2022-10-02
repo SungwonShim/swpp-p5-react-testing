@@ -56,24 +56,22 @@ export const articleSlice = createSlice({
     name: 'article',
     initialState,
     reducers:{
-        articleAdd: (state, action: PayloadAction<{ article : ArticleType}>) => {
-            const articleToAdd = {id: action.payload.article.id, 
-                                author_id: action.payload.article.author_id, 
-                                title: action.payload.article.title, 
-                                content: action.payload.article.content}
+        articleAdd: (state, action: PayloadAction<{ author_id: number, title: string; content: string }>) => {
+            const articleToAdd = {id: state.articles[state.articles.length -1].id + 1,
+                                  title: action.payload.title,
+                                  content: action.payload.content,
+                                  author_id: action.payload.author_id};
             return {...state, articles: [...state.articles, articleToAdd], selectedArticle: articleToAdd};
         },
-        articleDelete: (state, action: PayloadAction<{articleId: number}>) => {
+        articleDelete: (state, action: PayloadAction<{articleId : number}>) => {
+            console.log(action.payload.articleId);
             const articlesAfterDeletion = state.articles.filter((article) => {return (article.id !== action.payload.articleId );
             });
             return {...state, articles: articlesAfterDeletion };
         },
-        articleEdit: (state, action: PayloadAction<{article: ArticleType}>) => {
-            const articleToEdit ={id: action.payload.article.id, 
-                author_id: action.payload.article.author_id, 
-                title: action.payload.article.title, 
-                content: action.payload.article.content};
-            const articlesAfterEdit = state.articles.filter((article) => {return article.id !== action.payload.article.id;});
+        articleEdit: (state, action: PayloadAction<ArticleType>) => {
+            const articleToEdit ={...action.payload};
+            const articlesAfterEdit = state.articles.filter((article) => {return article.id !== action.payload.id;});
             return {...state, articles: [...articlesAfterEdit, articleToEdit], selectedArticle: articleToEdit};
         },
     },

@@ -28,11 +28,8 @@ export const commentSlice = createSlice({
         getAllComments: (state, action: PayloadAction<{ comments: CommentType[] }>) => {
             return {...state, comments: action.payload.comments};
         },
-        commentAdd: (state, action: PayloadAction<{ comment: CommentType }>) => {
-            const commentToAdd = {id: action.payload.comment.id, 
-                                content: action.payload.comment.content, 
-                                author_id: action.payload.comment.author_id, 
-                                article_id: action.payload.comment.article_id};
+        commentAdd: (state, action: PayloadAction<CommentType>) => {
+            const commentToAdd = {...action.payload, id: state.comments[state.comments.length - 1].id + 1};
             return {...state, comments: [...state.comments, commentToAdd], selectedComment: commentToAdd}
         },
         commentDeletion: (state, action: PayloadAction<{ commentId: number }>) => {
@@ -41,13 +38,10 @@ export const commentSlice = createSlice({
             });
             return {...state, comments: commentsAfterDelete};
         },
-        commentEdit: (state, action: PayloadAction<{ comment: CommentType }>) => {
-            const commentToEdit = {id: action.payload.comment.id, 
-                                content: action.payload.comment.content, 
-                                author_id: action.payload.comment.author_id, 
-                                article_id: action.payload.comment.article_id};
+        commentEdit: (state, action: PayloadAction<CommentType>) => {
+            const commentToEdit = {...action.payload};
             const commentsAfterEdit = state.comments.filter((comment) => {
-                return comment.id !== action.payload.comment.id;
+                return comment.id !== action.payload.id;
             });
             return {...state, comments: [...commentsAfterEdit, commentToEdit], selectedComment: commentToEdit};    
         },

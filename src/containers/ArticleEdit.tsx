@@ -22,18 +22,20 @@ export default function ArticleEdit(){
       dispatch(fetchUser());
       dispatch(fetchArticles());
       dispatch(fetchArticle(Number(id)));
-      if(!userState.loginFlag){
-        navigate('/login');
+      console.log("edit");
+       if(!userState.user?.logged_in){
+         navigate('/login');
     }
   }, [id]);
 
   const logoutButtonHandler = async () => {
     const token = userState.users.find((user : UserType) => {return user.id === 1;});
-    if(token === undefined)
-      return;
-    const result = await dispatch(outUser(token));
-    navigate('/login');
-  };
+    if(token !== undefined) {
+        let noUser = {...token, logged_in: false};
+        await dispatch(outUser(noUser));
+        navigate('/login');
+    }
+};
   
     const confirmButtonHandler = async () => {
     if(articleState.selectedArticle === undefined || articleState.selectedArticle === null)

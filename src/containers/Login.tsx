@@ -14,20 +14,25 @@ export default function Login() {
     useEffect(() => {
         dispatch(fetchUsers());
         dispatch(fetchUser());
+        console.log("login");
+        if(userState.user?.logged_in){
+              navigate('/articles');
+        }
     }, []);
+
+    console.log(userState.user?.logged_in);
 
     const navigate = useNavigate();
 
-    const loginbuttonHandler = () => {
+    const loginbuttonHandler = async () => {
         const trylogin = {email: email, password: password, logged_in: false};
         const exist = userState.users.find(( user : UserType) => {
             return (user.email === trylogin.email && user.password === trylogin.password);
         });
 
         if(exist !== undefined) {
-            let newUser = {...exist, logged_in: true};
-            console.log(newUser);
-            dispatch(inUser(newUser));
+            let newUser : UserType = {...exist, logged_in: true};
+            await dispatch(inUser(newUser));
             navigate('/articles');
         }
         else{
@@ -37,7 +42,7 @@ export default function Login() {
     
     return(
         <div className='Login'>
-        {(userState.loginFlag) ? (<Navigate to = '/articles'></Navigate>) : (
+        {(userState.user?.logged_in) ? (<Navigate to = '/articles'></Navigate>) : (
             <div className='Login-page'>
                 <div className = "email-input">
                     <input id = "email-input" type = "email" onChange = {(e) => setEmail(e.target.value)}></input>
@@ -45,9 +50,9 @@ export default function Login() {
                 <div className = "pw-input">
                    <input id = "pw-input" type = "pw" onChange = {(e) => setPassword(e.target.value)}></input>
                 </div>
-                <button id = "login-button" onClick = {() => loginbuttonHandler()}>login</button>
             </div>
         )}
+        <button id = "login-button" onClick = {() => loginbuttonHandler()}>login</button>
         </div>
     );
 }

@@ -16,8 +16,9 @@ export default function ArticleList(){
         dispatch(fetchArticles());
         dispatch(fetchUsers());
         dispatch(fetchUser());
-         if(!userState.loginFlag){
-             navigate('/login');
+        console.log("list");
+        if(!userState.user?.logged_in){
+            navigate('/login');
         }
     }, []);
 
@@ -27,10 +28,11 @@ export default function ArticleList(){
     
     const logoutButtonHandler = async () => {
         const token = userState.users.find((user : UserType) => {return user.id === 1;});
-        if(token === undefined)
-          return;
-        await dispatch(outUser(token));
-        navigate('/login');
+        if(token !== undefined) {
+            let noUser = {...token, logged_in: false};
+            await dispatch(outUser(noUser));
+            navigate('/login');
+        }
     };
 
     let listedArticles = articleState.articles.map((article : ArticleType) =>{

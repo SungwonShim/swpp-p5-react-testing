@@ -21,6 +21,32 @@ const initialState: CommentState = {
     selectedComment: null,
 };
 
+export const fetchComments = createAsyncThunk("comment/fetchComments", async () => {
+    const response = await axios.get<CommentType[]>("/api/comments/");
+    return response.data;
+});
+
+export const editComment = createAsyncThunk(
+    "comment/editComment", 
+    async (ar: CommentType, { dispatch }) => {
+        const response = await axios.put("/api/comments/" + ar.id, ar);
+        dispatch(commentActions.commentEdit(response.data));
+});
+
+export const postComment = createAsyncThunk(
+    "comment/postComment", 
+    async (ar: Pick<CommentType, "author_id" | "article_id" | "content">, { dispatch }) => {
+        const response = await axios.post("/api/comments/", ar);
+        dispatch(commentActions.commentAdd(response.data));
+});
+
+export const deleteComment = createAsyncThunk(
+    "comment/deleteComment",
+    async(id: CommentType["id"], {dispatch}) => {
+        await axios.delete('/api/comments/' + id);
+        dispatch(commentActions.commentDeletion({commentId: id}));
+});
+
 export const commentSlice = createSlice({
     name: 'comment',
     initialState,
@@ -46,6 +72,13 @@ export const commentSlice = createSlice({
             return {...state, comments: [...commentsAfterEdit, commentToEdit], selectedComment: commentToEdit};    
         },
     },
+    extraReducers: (builder) => {
+        // Add reducers for additional action types here, and handle loading state as needed
+        builder.addCase(fetchComments.fulfilled, (state, action) => {
+        // Add user to the state array
+            state.comments = action.payload;
+        });
+    }
 });
 
 export const commentActions = commentSlice.actions;

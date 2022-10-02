@@ -66,7 +66,7 @@ export default function ArticleEdit(){
         <div className="ArticleEdit">
       {clickedPreview ? (
         <div className="PreviewTab">
-            <h3 id="article-author">{userState.users[0].name}</h3>
+            <h3 id="article-author">{userState.user?.name}</h3>
             <h1 id="article-title">{title}</h1>
             <p id="article-content">{content}</p>
         </div>

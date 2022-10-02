@@ -4,13 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
 import { selectArticle, fetchArticle, ArticleType, deleteArticle } from '../store/slices/article';
 import { AppDispatch } from '../store';
+import Comment from '../components/Comment';
+import comment, { CommentType, deleteComment, fetchComments, selectComment } from '../store/slices/comment';
+import { commentActions, postComment } from '../store/slices/comment';
 
 export default function ArticeDetail(){
-    
-    const [enableButton, setEnableButton] = useState<boolean>(false);
+    const [contentOfComment, setContentOfComment] = useState<string>("");
     const { id } = useParams();
     const articleState = useSelector(selectArticle);
     const userState = useSelector(selectUser);
+    const commentState = useSelector(selectComment);
     const navigate = useNavigate();
     // const location = useLocation();
 
@@ -28,12 +31,43 @@ export default function ArticeDetail(){
         // dispatch(articleActions.getOneArticle({articleId: arId}))
         console.log("detail");
         dispatch(fetchArticle(Number(id)));
+        dispatch(fetchComments());
     }, [id]);
 
-    const findAuthorName = (anArticle : ArticleType | null) => {
-        return userState.users.find((user : UserType) => {return (user.id === anArticle?.author_id);})?.name;
+    const findAuthorName = (ID : number | undefined) => {
+        return userState.users.find((user : UserType) => {return (user.id === ID);})?.name;
     };
     
+    const commentEditButtonHandler = (comment: CommentType) => {
+        let notice = prompt("Edit Comment", comment.content);
+        if(notice === null || notice.length === 0){
+            alert("user cannot create empty comment");
+        }
+        else{
+            commentActions.commentEdit(comment);
+        }
+    };
+
+    const commentDeleteButtonHandler = (comment: CommentType) => {
+        dispatch(deleteComment(comment.id));
+    };
+
+    const CommentsforThisArticle = commentState.comments.filter((comment: CommentType) => {return (comment.article_id === Number(id));});
+
+    let listedComments = CommentsforThisArticle.map((comment : CommentType) =>{
+        return(
+            <Comment
+                key = {comment.id}
+                author = {findAuthorName(comment.author_id)}
+                authorId = {comment.author_id}
+                content = {comment.content}
+                editButtonHandler = {() => commentEditButtonHandler(comment)}
+                deleteButtonHandler = {() => commentDeleteButtonHandler(comment)}
+            />
+        );
+    });
+
+
     const deleteButtonHandler = (id : number | undefined) => {
         if (id === undefined){
             console.log("no such article");
@@ -43,6 +77,15 @@ export default function ArticeDetail(){
         navigate('/articles');
     };
     
+    const commentCreateButtonHandler = () => {
+        if(userState.user === undefined || userState.user === null)
+            return;
+        if(articleState.selectedArticle === undefined || articleState.selectedArticle === null)
+            return;
+        const data = {content : contentOfComment, author_id: userState.user.id, article_id: articleState.selectedArticle.id};
+        dispatch(postComment(data));
+    };
+
     const logoutButtonHandler = async () => {
         const token = userState.users.find((user : UserType) => {return user.id === 1;});
         if(token !== undefined) {
@@ -63,10 +106,10 @@ export default function ArticeDetail(){
 
     return (
         <div className='ArticleDetail'>
-            <h3 id = "article-author">{findAuthorName(articleState.selectedArticle)}</h3>
+            <h3 id = "article-author">{findAuthorName(articleState.selectedArticle?.id)}</h3>
             <h1 id = "article-title">{articleState.selectedArticle?.title}</h1>
             <h1 id = "article-content">{articleState.selectedArticle?.content}</h1>
-            {(articleState.selectedArticle?.author_id === 1) ? (
+            {(articleState.selectedArticle?.author_id === userState.user?.id) ? (
             <div>
                 <button id = "edit-article-button" onClick = {() => navigate("/articles/" + articleState.selectedArticle?.id + "/edit")}>edit-article</button>
                 <button id = "delete-article-button" onClick = {() => deleteButtonHandler(articleState.selectedArticle?.id)}>delete-article</button>
@@ -76,11 +119,15 @@ export default function ArticeDetail(){
             (<div></div>)
             }
             <button id = "back-detail-article-button" onClick = {() => navigate("/articles")}>back</button>
-            {/* <div className='Comment'>
-                <h5> {comment_author}</h5>
-                <p>{comment_content}</p>
-                {CEDButtonHandler}
-            </div> */}
+            <div className='Comment'>
+                {listedComments}
+                <textarea id = "new-comment-content-input" value = {contentOfComment} onChange = {(e) => (setContentOfComment(e.target.value))}>
+                    Type Comment Here
+                </textarea>
+                <button id = "confirm-create-comment-button" onClick = {() => commentCreateButtonHandler()} disabled = {(contentOfComment === '' || contentOfComment === null)}>
+                    confirm
+                </button>
+            </div>
             <button id='logout-button' onClick = {() => logoutButtonHandler()}>
                 logout
             </button>

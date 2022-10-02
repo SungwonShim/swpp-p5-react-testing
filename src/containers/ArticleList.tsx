@@ -27,7 +27,7 @@ export default function ArticleList(){
     };
     
     const logoutButtonHandler = async () => {
-        const token = userState.users.find((user : UserType) => {return user.id === 1;});
+        const token = userState.users.find((user : UserType) => {return user.id === userState.user?.id;});
         if(token !== undefined) {
             let noUser = {...token, logged_in: false};
             await dispatch(outUser(noUser));
@@ -40,7 +40,7 @@ export default function ArticleList(){
             <Article
                 key = {article.id}
                 id = {article.id}
-                clickDetail = { () => { navigate('/articles/' + article.id); }}
+                buttonHandler = { () => { navigate('/articles/' + article.id); }}
                 title = {article.title}
                 author = {findAuthorName(article)}
             />

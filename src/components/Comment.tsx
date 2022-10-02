@@ -1,27 +1,28 @@
 import React from 'react';
 
 interface IProps {
-    author: string;
+    author: string | undefined;
     authorId: number;
     content: string;
-    editFunc?: React.MouseEventHandler<HTMLButtonElement>;
-    deleteFunc?: React.MouseEventHandler<HTMLButtonElement>;
+    editButtonHandler?: React.MouseEventHandler<HTMLButtonElement>;
+    deleteButtonHandler?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const Comment = (props:IProps) => {
-    let editbutton=null;
-    let deletebutton=null;
-    if(props.authorId===1){
-        editbutton=(<button id="edit-comment-button" onClick={props.editFunc}>edit</button>);
-        deletebutton=(<button id="delete-comment-button" onClick={props.deleteFunc}>delete</button>);
-    }
+const Comment = (props : IProps) => {
 
     return (
       <div className="Comment">
         <p>{props.author}</p>
         <p>{props.content}</p>
-        {editbutton}
-        {deletebutton}
+        {
+          (props.authorId === 1) ? 
+          (<div className = "buttons">
+          <button id="edit-comment-button" onClick={props.editButtonHandler}>edit</button>
+          <button id="delete-comment-button" onClick={props.deleteButtonHandler}>delete</button>
+          </div>) : 
+          (<div>
+          </div>)
+        }
       </div>
     );
   };

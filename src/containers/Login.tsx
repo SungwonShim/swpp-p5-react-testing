@@ -1,8 +1,8 @@
 import react, {useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, RedirectFunction, Navigate } from 'react-router-dom';
-import { selectUser, fetchUser, fetchUsers, inUser, UserType } from '../store/slices/users';
+import { useNavigate,  Navigate } from 'react-router-dom';
 import { AppDispatch } from '../store/index';
+import { selectUser, fetchUser, fetchUsers, inUser, UserType } from '../store/slices/users';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -14,7 +14,6 @@ export default function Login() {
     useEffect(() => {
         dispatch(fetchUsers());
         dispatch(fetchUser());
-        console.log("login");
         if(userState.user?.logged_in){
               navigate('/articles');
         }

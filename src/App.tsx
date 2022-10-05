@@ -1,6 +1,6 @@
 import "./App.css";
 import Login from "./containers/Login"; 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ArticleList from "./containers/ArticleList";
 import ArticleCreate from './containers/ArticleCreate';
 import ArticleDetail from "./containers/ArticleDetail";
@@ -17,6 +17,7 @@ function App() {
           <Route path="/articles/:id" element={<ArticleDetail/>}/>
           <Route path="/articles/:id/edit" element={<ArticleEdit/>}/>
           <Route path="/" element={<Navigate replace to={"/login"} />} />
+          <Route path="/*" element={<Navigate replace to={"/login"} />} />
         </Routes>
       </BrowserRouter>
     </div>

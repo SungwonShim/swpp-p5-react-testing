@@ -1,12 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, {useEffect, useState}from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Comment from '../components/Comment';
+import { AppDispatch } from '../store';
 import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
 import { selectArticle, fetchArticle, ArticleType, deleteArticle } from '../store/slices/article';
-import { AppDispatch } from '../store';
-import Comment from '../components/Comment';
-import comment, { CommentType, deleteComment, fetchComments, selectComment } from '../store/slices/comment';
-import { commentActions, postComment } from '../store/slices/comment';
+import { CommentType, deleteComment, fetchComments, selectComment, postComment, editComment } from '../store/slices/comment';
 
 export default function ArticeDetail(){
     const [contentOfComment, setContentOfComment] = useState<string>("");
@@ -29,7 +28,6 @@ export default function ArticeDetail(){
         // const splitURL = location.pathname.split('/');
         // let arId = parseInt(splitURL[splitURL.length-1]);
         // dispatch(articleActions.getOneArticle({articleId: arId}))
-        console.log("detail");
         dispatch(fetchArticle(Number(id)));
         dispatch(fetchComments());
     }, [id]);
@@ -38,13 +36,14 @@ export default function ArticeDetail(){
         return userState.users.find((user : UserType) => {return (user.id === ID);})?.name;
     };
     
-    const commentEditButtonHandler = (comment: CommentType) => {
+    const commentEditButtonHandler = (comment: CommentType) => {  
         let notice = prompt("Edit Comment", comment.content);
         if(notice === null || notice.length === 0){
             alert("user cannot create empty comment");
         }
         else{
-            commentActions.commentEdit(comment);
+            const EdittedComment = {...comment, content: notice};
+            dispatch(editComment(EdittedComment));
         }
     };
 
@@ -52,7 +51,7 @@ export default function ArticeDetail(){
         dispatch(deleteComment(comment.id));
     };
 
-    const CommentsforThisArticle = commentState.comments.filter((comment: CommentType) => {return (comment.article_id === Number(id));});
+    const CommentsforThisArticle = commentState.comments.filter((comment: CommentType) => {return (comment.article_id === Number(id));}).sort((a, b) => a.id - b.id);
 
     let listedComments = CommentsforThisArticle.map((comment : CommentType) =>{
         return(
@@ -66,6 +65,7 @@ export default function ArticeDetail(){
             />
         );
     });
+
 
 
     const deleteButtonHandler = (id : number | undefined) => {

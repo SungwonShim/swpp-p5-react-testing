@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Comment from '../components/Comment';
 import { AppDispatch } from '../store';
 import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
-import { selectArticle, fetchArticle, ArticleType, deleteArticle } from '../store/slices/article';
+import { selectArticle, fetchArticle, deleteArticle } from '../store/slices/article';
 import { CommentType, deleteComment, fetchComments, selectComment, postComment, editComment } from '../store/slices/comment';
 
 export default function ArticeDetail(){
@@ -30,7 +30,7 @@ export default function ArticeDetail(){
         // dispatch(articleActions.getOneArticle({articleId: arId}))
         dispatch(fetchArticle(Number(id)));
         dispatch(fetchComments());
-    }, [id]);
+    });
 
     const findAuthorName = (ID : number | undefined) => {
         return userState.users.find((user : UserType) => {return (user.id === ID);})?.name;

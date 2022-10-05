@@ -24,7 +24,7 @@ export default function ArticleEdit(){
       }
       dispatch(fetchArticles());
       dispatch(fetchArticle(Number(id)));
-  }, [id]);
+  });
 
   const logoutButtonHandler = async () => {
     const token = userState.users.find((user : UserType) => {return user.id === 1;});
@@ -81,7 +81,7 @@ export default function ArticleEdit(){
       <button id="back-edit-article-button" onClick={() => backButtonHandler()}>
         back
       </button>
-      <button id="confirm-edit-article-button" disabled={ title == '' || content == '' } onClick={() => confirmButtonHandler()}>
+      <button id="confirm-edit-article-button" disabled={ title === '' || content === '' } onClick={() => confirmButtonHandler()}>
         confirm
       </button>
       <button id="preview-tab-button" onClick={() => setClickedPreview(true)}>

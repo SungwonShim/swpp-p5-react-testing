@@ -22,7 +22,7 @@ export default function ArticleCreate(){
          navigate('/login');
       }
       dispatch(fetchArticles());
-  }, []);
+  });
 
     
   

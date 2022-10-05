@@ -19,7 +19,7 @@ export default function ArticleList(){
         if(!userState.user?.logged_in){
             navigate('/login');
         }
-    }, []);
+    });
 
     const findAuthorName = (anArticle : ArticleType | null) => {
         return userState.users.find((user : UserType) => {return (user.id === anArticle?.author_id);})?.name;

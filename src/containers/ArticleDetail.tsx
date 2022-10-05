@@ -84,6 +84,7 @@ export default function ArticeDetail(){
             return;
         const data = {content : contentOfComment, author_id: userState.user.id, article_id: articleState.selectedArticle.id};
         dispatch(postComment(data));
+        setContentOfComment("");
     };
 
     const logoutButtonHandler = async () => {

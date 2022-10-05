@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate} from 'react-router-dom';
-import Article from '../components/Article';
 import { AppDispatch } from '../store';
 import { fetchArticles, selectArticle, ArticleType } from '../store/slices/article';
+import Article from '../components/Article';
+import { useNavigate } from 'react-router-dom';
 import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
 
 export default function ArticleList(){
@@ -19,7 +19,7 @@ export default function ArticleList(){
         if(!userState.user?.logged_in){
             navigate('/login');
         }
-    });
+    }, []);
 
     const findAuthorName = (anArticle : ArticleType | null) => {
         return userState.users.find((user : UserType) => {return (user.id === anArticle?.author_id);})?.name;

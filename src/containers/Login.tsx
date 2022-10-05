@@ -1,8 +1,8 @@
 import React, {useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate,  Navigate } from 'react-router-dom';
-import { AppDispatch } from '../store/index';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { selectUser, fetchUser, fetchUsers, inUser, UserType } from '../store/slices/users';
+import { AppDispatch } from '../store/index';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ export default function Login() {
         if(userState.user?.logged_in){
               navigate('/articles');
         }
-    });
+    }, []);
 
     console.log(userState.user?.logged_in);
 

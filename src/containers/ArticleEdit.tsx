@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { fetchArticle, selectArticle, editArticle } from '../store/slices/article';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store';
-import { fetchArticle, selectArticle, editArticle, fetchArticles } from '../store/slices/article';
+import { fetchArticles } from '../store/slices/article';
 import { fetchUser, fetchUsers, outUser, selectUser, UserType } from '../store/slices/users';
 
 export default function ArticleEdit(){
@@ -24,7 +25,7 @@ export default function ArticleEdit(){
       }
       dispatch(fetchArticles());
       dispatch(fetchArticle(Number(id)));
-  });
+  }, [id]);
 
   const logoutButtonHandler = async () => {
     const token = userState.users.find((user : UserType) => {return user.id === 1;});
@@ -81,7 +82,7 @@ export default function ArticleEdit(){
       <button id="back-edit-article-button" onClick={() => backButtonHandler()}>
         back
       </button>
-      <button id="confirm-edit-article-button" disabled={ title === '' || content === '' } onClick={() => confirmButtonHandler()}>
+      <button id="confirm-edit-article-button" disabled={ title == '' || content == '' } onClick={() => confirmButtonHandler()}>
         confirm
       </button>
       <button id="preview-tab-button" onClick={() => setClickedPreview(true)}>

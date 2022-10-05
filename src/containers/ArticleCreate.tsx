@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { selectArticle } from '../store/slices/article';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store';
-import { selectArticle, postArticle, fetchArticles  } from '../store/slices/article';
+import { postArticle, fetchArticles } from '../store/slices/article';
 import { fetchUser, fetchUsers, selectUser, outUser, UserType } from '../store/slices/users';
 
 export default function ArticleCreate(){
@@ -22,7 +23,7 @@ export default function ArticleCreate(){
          navigate('/login');
       }
       dispatch(fetchArticles());
-  });
+  }, []);
 
     
   

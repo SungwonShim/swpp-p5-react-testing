@@ -54,9 +54,7 @@ export const userSlice = createSlice({
     initialState,
     reducers:{
         logIn: (state, action: PayloadAction<UserType>) => {
-            console.log(action.payload);
             const newUser = {...action.payload, logged_in: true};
-            console.log(newUser);
             const usersAfterLogin = state.users.filter((user) => {
                 return (user.id !== action.payload.id);
             });
